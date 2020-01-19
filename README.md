@@ -7,9 +7,10 @@ Framework : Spring Framework
 Porta: 8093
 
 
+# cURL
 
 Criação:
-# *Caso um dos campos Latitudes e longitudes for nulo ou vazio é utilizado o CEP para buscar os mesmo vai API Google
+*Caso um dos campos Latitudes e longitudes for nulo ou vazio é utilizado o CEP para buscar os mesmo vai API Google
 
 curl -X POST \
   http://localhost:8093/v1/address \
