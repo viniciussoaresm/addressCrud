@@ -1,4 +1,4 @@
-package br.com.stoom.backend.qualification.model;
+package br.com.stoom.backend.qualification.pojo.model;
 
 
 import javax.persistence.*;
@@ -127,4 +127,31 @@ public class Address {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
+
+    public Boolean validLongitude() {
+
+        if (longitude == null) {
+            return false;
+        }
+
+        if (longitude.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public Boolean validLatitude() {
+
+        if (latitude == null) {
+            return false;
+        }
+
+        if (latitude.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

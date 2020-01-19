@@ -1,7 +1,9 @@
 package br.com.stoom.backend.qualification.api.v1;
 
-import br.com.stoom.backend.qualification.model.Address;
+import br.com.stoom.backend.qualification.pojo.dto.Location;
+import br.com.stoom.backend.qualification.pojo.model.Address;
 import br.com.stoom.backend.qualification.repository.AddressRepository;
+import br.com.stoom.backend.qualification.service.MapsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ public class AddressController {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private MapsService mapsService;
 
     @RequestMapping(value = "/v1/address/{id}",method = RequestMethod.DELETE)
     public ResponseEntity<Address> deleteAddress(@PathVariable(value = "id") long id){
@@ -67,6 +72,7 @@ public class AddressController {
                 updateAddress.setState(address.getState());
                 updateAddress.setZipcode(address.getZipcode());
                 updateAddress = addressRepository.save(updateAddress);
+
                 return new ResponseEntity<Address>(updateAddress,HttpStatus.OK);
             }else{
                 return new ResponseEntity<Address>(HttpStatus.NOT_FOUND);
@@ -78,6 +84,13 @@ public class AddressController {
 
     @RequestMapping(value = "/v1/address",method = RequestMethod.POST)
     public Address newAddress(@Valid @RequestBody Address address){
+
+        if (!address.validLatitude() || !address.validLongitude()) {
+            Location location = mapsService.getLocationByCep(address.getZipcode().toString());
+            address.setLatitude(location.getLatitude());
+            address.setLongitude(location.getLongitude());
+        }
+
         return addressRepository.save(address);
     }
 
